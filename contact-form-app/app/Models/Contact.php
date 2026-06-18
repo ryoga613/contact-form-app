@@ -1,0 +1,47 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use App\Models\Category;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+
+class Contact extends Model
+{
+    use HasFactory;
+
+    protected $fillable = [
+        'category_id',
+        'first_name',
+        'last_name',
+        'gender',
+        'email',
+        'tel',
+        'address',
+        'building',
+        'detail',
+    ];
+
+
+
+    public function category(): BelongsTo
+    {
+        return $this->belongsTo(Category::class);
+    }
+
+    public function tag(): BelongsToMany
+    {
+        return $this->BelongsToMany(Tag::class);
+    }
+
+    public function getGenderLabelAttribute()
+    {
+        return match ($this->gender) {
+            1 => '男',
+            2 => '女',
+            default => 'その他',
+        };
+    }
+}
