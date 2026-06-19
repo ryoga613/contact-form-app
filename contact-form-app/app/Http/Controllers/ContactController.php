@@ -26,7 +26,10 @@ class ContactController extends Controller
     {
         $validated = $request->validated();
 
-        return view('contact.confirm',compact('validated'));
+        $category = Category::find($validated['category_id']);
+
+
+        return view('contact.confirm',compact('validated','category'));
     }
 
     /**
@@ -34,8 +37,18 @@ class ContactController extends Controller
      */
     public function store(Request $request)
     {
-        Contact::create($request);
-        return redirect()->route('contacts.thanks');
+        Contact::create($request->only([
+            'first_name',
+            'last_name',
+            'gender',
+            'email',
+            'tel',
+            'address',
+            'building',
+            'category_id',
+            'detail',
+        ]));
+        return redirect('/contact/thanks');
     }
 
     /**
@@ -43,11 +56,10 @@ class ContactController extends Controller
      */
     public function show(string $id)
     {
-        $category = Category::findOrFail($id);
-        return view('contacts.detail',compact('category'));
+        //
     }
 
-    public function thanks(string $id)
+    public function thanks()
     {
         return view('contact.thanks');
     }
