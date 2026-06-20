@@ -23,5 +23,13 @@ class CategorySeeder extends Seeder
         Category::create([
             'content' => '商品トラブル',
         ]);
+
+        Category::create([
+            'content' => 'ショップへのお問い合わせ',
+        ]);
+
+        Category::create([
+            'content' => 'その他',
+        ]);
     }
 }
