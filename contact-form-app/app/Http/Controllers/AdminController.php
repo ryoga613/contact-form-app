@@ -2,65 +2,75 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Category;
-use Doctrine\DBAL\Query;
+use App\Models\Contact;
+use App\Models\Tag;
+use Illuminate\Http\Request;
 
 class AdminController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index(Request $request,Query $query)
+    public function index(Request $request)
     {
-        return view('admin.index',compact('categories'));
+        $query = Contact::query();
+
+        if ($request->filled('keyword')) {
+            $searchKeyword = $request->input('keyword');
+
+            $query->where(
+                'first_name',
+                'like',
+                '%'.$searchKeyword.'%'
+            )
+                ->orWhere(
+                    'last_name',
+                    'like',
+                    '%'.$searchKeyword.'%'
+                )
+                ->orwhere(
+                    'email',
+                    'like',
+                    '%'.$searchKeyword.'%'
+                );
+        }
+
+        if ($request->filled('gender')) {
+            $searchGender = $request->input('gender');
+            $query->where(
+                'gender', $searchGender
+            );
+        }
+
+        if ($request->filled('category_id')) {
+            $searchCategory_id = $request->input('category_id');
+            $query->where('category_id', $searchCategory_id);
+
+        }
+
+        if ($request->filled('date') && $request->has('date')) {
+            $searchDate = $request->input('date');
+            $query->whereDate(
+                'created_at', $searchDate
+            );
+        }
+
+        $categories = Category::all();
+        $contacts = $query->paginate(7);
+        $tags = Tag::all();
+
+        return view('admin.index', compact('categories', 'contacts', 'tags'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
     public function show(string $id)
     {
-        //
+        $contact = Contact::findOrFail($id);
+
+        return view('admin.show', compact('contact'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(string $id)
     {
-        //
+        Contact::destroy($id);
+
+        return redirect('/admin');
     }
 }

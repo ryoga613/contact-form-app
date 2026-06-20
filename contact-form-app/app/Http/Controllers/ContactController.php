@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Http\Requests\ContactRequest;
-use App\Models\Contact;
 use App\Models\Category;
-
+use App\Models\Contact;
+use Illuminate\Http\Request;
 
 class ContactController extends Controller
 {
@@ -16,6 +15,7 @@ class ContactController extends Controller
     public function index()
     {
         $categories = Category::all();
+
         return view('contact.index', compact('categories'));
     }
 
@@ -28,8 +28,7 @@ class ContactController extends Controller
 
         $category = Category::find($validated['category_id']);
 
-
-        return view('contact.confirm',compact('validated','category'));
+        return view('contact.confirm', compact('validated', 'category'));
     }
 
     /**
@@ -48,7 +47,8 @@ class ContactController extends Controller
             'category_id',
             'detail',
         ]));
-        return redirect('/contact/thanks');
+
+        return redirect('/contacts/thanks');
     }
 
     /**
@@ -63,6 +63,7 @@ class ContactController extends Controller
     {
         return view('contact.thanks');
     }
+
     /**
      * Show the form for editing the specified resource.
      */
