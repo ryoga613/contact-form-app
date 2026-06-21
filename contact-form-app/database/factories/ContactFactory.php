@@ -2,11 +2,12 @@
 
 namespace Database\Factories;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\Category;
+use App\Models\Model;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Model>
+ * @extends Factory<Model>
  */
 class ContactFactory extends Factory
 {
@@ -17,7 +18,8 @@ class ContactFactory extends Factory
      */
     public function definition(): array
     {
-         $faker = \Faker\Factory::create('ja_JP');
+        $faker = \Faker\Factory::create('ja_JP');
+
         return [
             'first_name' => $faker->lastName(),
             'last_name' => $faker->firstName(),
@@ -27,7 +29,7 @@ class ContactFactory extends Factory
             'address' => $faker->address(),
             'building' => $faker->secondaryAddress(),
             'detail' => $faker->realText(100),
-            'category_id' => Category::inRandomOrder()->first()->id,
+            'category_id' => Category::factory(),
         ];
     }
 }
