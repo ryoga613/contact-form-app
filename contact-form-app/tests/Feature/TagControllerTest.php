@@ -4,7 +4,6 @@ namespace Tests\Feature;
 
 use App\Models\Tag;
 use App\Models\User;
-use App\Http\Requests\StoreTagRequest;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -17,21 +16,20 @@ class TagControllerTest extends TestCase
         $user = User::factory()->create();
         $tag = Tag::factory()->create();
 
-        $response = $this->actingAs($user)->get('/admin/tags/' . $tag->id . '/edit');
+        $response = $this->actingAs($user)->get('/admin/tags/'.$tag->id.'/edit');
 
         $response->assertStatus(200);
         $response->assertViewIs('admin.tags.edit');
-        
+
         $response->assertViewHas('tag', function ($viewTag) use ($tag) {
             return $viewTag->id === $tag->id;
         });
     }
 
-    
     public function test_store_saves_tag_and_redirects(): void
     {
         $user = User::factory()->create();
-        
+
         $tagData = [
             'name' => '新規タグ',
         ];
@@ -46,7 +44,6 @@ class TagControllerTest extends TestCase
         ]);
     }
 
-
     public function test_update_modifies_tag_and_redirects(): void
     {
         $user = User::factory()->create();
@@ -58,13 +55,13 @@ class TagControllerTest extends TestCase
             'name' => '新しいタグ名',
         ];
 
-        $response = $this->actingAs($user)->put('/admin/tags/' . $tag->id, $updatedData);
+        $response = $this->actingAs($user)->put('/admin/tags/'.$tag->id, $updatedData);
 
         $response->assertStatus(302);
         $response->assertRedirect('/admin');
 
         $this->assertDatabaseHas('tags', [
-            'id'   => $tag->id,
+            'id' => $tag->id,
             'name' => '新しいタグ名',
         ]);
     }
@@ -74,7 +71,7 @@ class TagControllerTest extends TestCase
         $user = User::factory()->create();
         $tag = Tag::factory()->create();
 
-        $response = $this->actingAs($user)->delete('/admin/tags/' . $tag->id);
+        $response = $this->actingAs($user)->delete('/admin/tags/'.$tag->id);
 
         $response->assertStatus(302);
         $response->assertRedirect('/admin');
