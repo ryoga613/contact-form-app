@@ -16,6 +16,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('/contacts/export', [AdminController::class, 'export']);
+
+
 Route::middleware('auth')
     ->prefix('admin')
     ->group(function () {
@@ -29,7 +32,7 @@ Route::middleware('auth')
         Route::post('/tags/{tag}', [TagController::class, 'store']);
         Route::put('/tags/{tag}', [TagController::class, 'update']);
         Route::delete('/tags/{tag}', [TagController::class, 'destroy']);
-
+        
     });
 
 Route::get('/', [ContactController::class, 'index']);
