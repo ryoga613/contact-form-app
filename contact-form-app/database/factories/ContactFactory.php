@@ -29,7 +29,7 @@ class ContactFactory extends Factory
             'address' => $faker->address(),
             'building' => $faker->secondaryAddress(),
             'detail' => $faker->realText(100),
-            'category_id' => Category::factory(),
+            'category_id' => Category::inRandomOrder()->first()?->id ?? 1,
         ];
     }
 }

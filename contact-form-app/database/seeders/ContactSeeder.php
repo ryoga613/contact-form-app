@@ -21,7 +21,7 @@ class ContactSeeder extends Seeder
                 ->limit(rand(1, 3))
                 ->pluck('id');
 
-            $contact->tag()->attach($tagIds);
+            $contact->tags()->attach($tagIds);
         }
     }
 }
